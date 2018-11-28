@@ -6,7 +6,8 @@ public class Demo {
 	public static void main(String[] args) {
 		Point p1 = new Point(1, 2);
 		int x = p1.getX();
-		int Y = p1.getY();
+		int y = p1.getY();
+		System.out.println(x + "," + y);
 
 		/*
 		 * Object的toString方法的设计意图是将当前类实例转换为一个字符串。

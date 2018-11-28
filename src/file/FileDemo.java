@@ -1,8 +1,6 @@
 package file;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * java.io.File
@@ -32,6 +30,13 @@ public class FileDemo {
 		
 		long length = file.length();
 		System.out.println(length);
+		
+		boolean canRead = file.canRead();
+		boolean canWrite = file.canWrite();
+		boolean hidden = file.isHidden();
+		System.out.println(canRead);
+		System.out.println(canWrite);
+		System.out.println(hidden);
 	}
 
 }
