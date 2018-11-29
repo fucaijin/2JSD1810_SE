@@ -1,2 +1,3 @@
 /bin/apidoc/*.class
 *.class
+/bin/

@@ -5,6 +5,7 @@ import java.io.File;
 /*
  * 练习1:编写一段代码，完成1+2+...+100，并输出结果。不得使用for、while等循环	答案:5050
  * 练习2:买汽水，1块钱1瓶汽水，2个空瓶可以换1瓶汽水，3个瓶盖可以换1瓶汽水，问：20元可以买到多少瓶汽水？	答案:113瓶
+ * TODO 未完成练习2
  * 
  * 完成方法，删除指定的File表示的文件或目录
  */
@@ -13,12 +14,12 @@ public class Test {
 		File file = new File("a");
 		delete(file);
 		System.out.println(addTo(1,100));
-		System.out.println(sodaWaterNum(20));
+//		System.out.println(sodaWaterNum(20));
 	}
 
-	public static int sodaWaterNum(int money) {
-		
-	}
+//	public static int sodaWaterNum(int money) {
+//		
+//	}
 
 	/*
 	 * 某个数加到某个数
