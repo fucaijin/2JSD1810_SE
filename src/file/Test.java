@@ -14,13 +14,25 @@ public class Test {
 		File file = new File("a");
 		delete(file);
 		System.out.println(addTo(1,100));
-//		System.out.println(sodaWaterNum(20));
+		System.out.println(sodaWaterNum(20, 0, 0));
 	}
 
-//	public static int sodaWaterNum(int money) {
-//		
-//	}
-
+	public static int sodaWaterNum(int money, int bottle, int lid) {
+		if(money > 0 || bottle > 1 || lid > 2){
+			money += bottle / 2 + lid / 3;
+			money += sodaWaterNum(0, money + bottle % 2, money + lid % 3);
+		}
+		return money;
+	}
+	
+//	3
+//	3	0	0
+	
+//	3	0	0
+//	3	1	1
+	
+//	0	5	
+	
 	/*
 	 * 某个数加到某个数
 	 */
