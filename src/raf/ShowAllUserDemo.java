@@ -5,7 +5,6 @@ import java.io.RandomAccessFile;
 
 /**
  * 将user.dat文件中的每个用户信息读取出来并输出到控制台
- *
  */
 public class ShowAllUserDemo {
 

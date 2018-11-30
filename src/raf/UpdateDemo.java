@@ -1,7 +1,9 @@
 package raf;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -15,6 +17,47 @@ import java.util.Scanner;
 public class UpdateDemo {
 
 	public static void main(String[] args) throws IOException {
+//		excersize1();
+		excersize2();
+	}
+
+	public static void excersize2() throws IOException {
+		Scanner scn = new Scanner(System.in);
+		System.out.println("请输入用户名：");
+		String userName = scn.nextLine().trim();
+		System.out.println("请输入新昵称：");
+		String newNickName = scn.nextLine().trim();
+		
+		RandomAccessFile raf = new RandomAccessFile("user.dat", "rw");
+		byte[] b;
+		
+		boolean flag = false;
+		for (int i = 0; i < raf.length()/10; i++) {
+			raf.seek(i*100);
+			b = new byte[32];
+			raf.read(b);
+			String searchUsrName = new String(b,"utf-8").trim();
+			
+			if (searchUsrName.equals(userName)) {
+				raf.seek(i*100 + 64);
+				b = newNickName.getBytes("utf-8");
+				b = Arrays.copyOf(b, 32);
+				raf.write(b);
+				
+				System.out.println("昵称修改成功");
+				flag = true;
+			}
+		}
+		
+		if(!flag){
+			System.out.println("没有此用户");
+		}
+		
+		scn.close();
+		raf.close();
+	}
+
+	public static void excersize1() throws FileNotFoundException, IOException, UnsupportedEncodingException {
 		RandomAccessFile raf = new RandomAccessFile("user.dat", "rw");
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("请输入用户名");
