@@ -32,7 +32,7 @@ public class Client {
 
 			System.out.println("正在连接服务端...");
 			socket = new Socket("176.126.22.112", 8088); // "localhost"代表本机IP
-															// 176.126.22.111(我的)
+															// 176.126.22.111(我的)  //176.126.22.112(同桌)
 			System.out.println("与服务端建立连接");
 
 		} catch (Exception e) {
@@ -60,7 +60,6 @@ public class Client {
 				String input = scn.nextLine();
 				pw.println(input);
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
