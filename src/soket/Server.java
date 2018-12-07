@@ -1,12 +1,17 @@
 package soket;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 /**
  * 聊天室服务端
@@ -21,6 +26,11 @@ public class Server {
 	 * 如果把Socket比喻为电话,那么ServerSocket可以想象为总机
 	 */
 	private ServerSocket server;
+	
+	/*
+	 * 用于保存所有客户端输出流的数组,为ClientHandler之间共享各自对应客户端的输出流,从而做到广播消息.
+	 */
+	private PrintWriter[] allOut = {};
 
 	public Server() {
 		try {
@@ -64,11 +74,11 @@ public class Server {
 
 	private class ClientHandler implements Runnable{
 //		当前线程通过这个Socket与对应客户端交互
-		private Socket accept;
+		private Socket socket;
 //		客户端地址信息
 		private String host;
 		public ClientHandler(Socket accept) {
-			this.accept = accept;
+			this.socket = accept;
 			
 //			通过socket获取远端(客户端)地址信息
 			InetAddress address = accept.getInetAddress();
@@ -77,27 +87,72 @@ public class Server {
 		}
 
 		public void run(){
+			PrintWriter pw = null;
 			try {
-				
 				/*
 				 * 通过Socket获取输入流，读客户端发送过来的消息 InputStream getInputStream()
 				 */
 				// 接受客户端消息
-				InputStream is = accept.getInputStream();
+				InputStream is = socket.getInputStream();
 				InputStreamReader isr = new InputStreamReader(is, "utf-8");
 				BufferedReader br = new BufferedReader(isr);
-				String msg = null;
+				
+				/*
+				 * 通过socket获取输出流,用于给客户端发消息
+				 */
+				OutputStream out = socket.getOutputStream();
+				OutputStreamWriter ow = new OutputStreamWriter(out, "utf-8");
+				BufferedWriter bw = new BufferedWriter(ow);
+				pw = new PrintWriter(bw, true);
+				
+				synchronized(allOut){
+					// 将该客户端对应的输出流存入到共享数组中
+					// 1.对allOut扩容
+					allOut = Arrays.copyOf(allOut, allOut.length+1);
+					// 2.将该输出流存入到数组最后一个位置
+					allOut[allOut.length-1] = pw;
+				}
+				
+				System.out.println("当前在线人数:" + allOut.length);
+				
 				/*
 				 * br.readLine()读取客户端发送过来的一行字符串操作中档客户端断开连接时， 客户端系统不同，这里的表现也完全不一样
 				 * 通常windows的客户端断开时，readLine方法会直接抛出异常：
 				 * linux的客户端断开连接时，readLine方法的返回值通常为null
 				 */
+				String msg = null;
 				while ((msg = br.readLine()) != null) {
-					System.out.println(host + "说:" + msg);
+//					将消息转发给当前的所有客户端
+					synchronized(allOut){
+						for (int i = 0; i < allOut.length; i++) {
+							allOut[i].println(host + "说:" + msg);
+						}
+					}
 				}
-				is.close();
 			} catch (IOException e) {
 				e.printStackTrace();
+			}finally{
+//				处理当前客户端断开连接后的操作
+//				1.将当前客户端的输出流从allOut中删除
+				synchronized(allOut){
+					for (int i = 0; i < allOut.length; i++) {
+						if (allOut[i] == pw) {
+							allOut[i] = allOut[allOut.length-1];
+							allOut = Arrays.copyOf(allOut, allOut.length-1);
+							break;
+						}
+					}
+				}
+				
+				System.out.println(host + "下线了");
+				System.out.println("当前在线人数:" + allOut.length);
+				
+//				关闭Socket流,就会将Socket.get出来的输出/输入流自动关闭
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

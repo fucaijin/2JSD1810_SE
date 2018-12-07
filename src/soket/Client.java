@@ -1,7 +1,10 @@
 package soket;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -31,8 +34,9 @@ public class Client {
 			 */
 
 			System.out.println("正在连接服务端...");
-			socket = new Socket("176.126.22.112", 8088); // "localhost"代表本机IP
-															// 176.126.22.111(我的)  //176.126.22.112(同桌)
+			socket = new Socket("176.126.22.111", 8088); // "localhost"代表本机IP
+															// 176.126.22.111(我的)
+															// //176.126.22.112(同桌)
 			System.out.println("与服务端建立连接");
 
 		} catch (Exception e) {
@@ -46,7 +50,13 @@ public class Client {
 	public void start() {
 
 		try {
-
+			/*
+			 * 启动用于读取服务端消息的线程
+			 */
+			ServerHandler serverHandler = new ServerHandler();
+			Thread thread = new Thread(serverHandler);
+			thread.start();
+			
 			/*
 			 * 若希望向服务端发送消息，那么我们需要通过 Socket获取输出流 OutputStream getOutputStream();
 			 */
@@ -55,6 +65,9 @@ public class Client {
 			OutputStreamWriter osw = new OutputStreamWriter(os, "utf-8");
 			BufferedWriter bos = new BufferedWriter(osw);
 			PrintWriter pw = new PrintWriter(bos, true);
+
+			
+			
 			Scanner scn = new Scanner(System.in);
 			while (true) {
 				String input = scn.nextLine();
@@ -69,5 +82,23 @@ public class Client {
 	public static void main(String[] args) {
 		Client client = new Client();
 		client.start();
+	}
+
+	private class ServerHandler implements Runnable {
+
+		public void run() {
+			try {
+				InputStream is = socket.getInputStream();
+				InputStreamReader isr = new InputStreamReader(is, "utf-8");
+				BufferedReader br = new BufferedReader(isr);
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					System.out.println(line);
+				}
+			} catch (Exception e) {
+			}
+
+		}
+
 	}
 }
