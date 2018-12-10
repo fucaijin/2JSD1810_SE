@@ -10,7 +10,7 @@ public class CrateNewFileDemo {
 
 	public static void main(String[] args) throws IOException {
 		/*
-		 * 在当前目录下新建一个文件test.txt
+		 * 在当前项目目录下新建一个文件test.txt
 		 */
 		File file = new File("./test.txt");
 

@@ -3,9 +3,9 @@ package file;
 import java.io.File;
 
 /*
+ * 递归练习:
  * 练习1:编写一段代码，完成1+2+...+100，并输出结果。不得使用for、while等循环	答案:5050
  * 练习2:买汽水，1块钱1瓶汽水，2个空瓶可以换1瓶汽水，3个瓶盖可以换1瓶汽水，问：20元可以买到多少瓶汽水？	答案:113瓶
- * TODO 未完成练习2
  * 
  * 完成方法，删除指定的File表示的文件或目录
  */
@@ -13,8 +13,8 @@ public class Test {
 	public static void main(String[] args) {
 		File file = new File("a");
 		delete(file);
-		System.out.println(addTo(1,100));
-		System.out.println(sodaWaterNum(20, 0, 0));
+		System.out.println(addTo(1,100));	// 输出练习1的结果
+		System.out.println(sodaWaterNum(20, 0, 0));	// 输出练习2的结果
 	}
 
 	public static int sodaWaterNum(int money, int bottle, int lid) {

@@ -1,7 +1,10 @@
 package soket;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -89,6 +92,21 @@ public class Client {
 		public void run() {
 			try {
 				InputStream is = socket.getInputStream();
+				
+//				当前是新建的文件
+//				BufferedInputStream bis = new BufferedInputStream(is);
+//				FileOutputStream fos = new FileOutputStream("abc.png");
+//				BufferedOutputStream bos = new BufferedOutputStream(fos);
+//				byte[] b = new byte[1024];
+//				int len = -1;
+//				while((len = bis.read(b)) != -1){
+//					bos.write(b, 0, len);
+//				};
+//				System.out.println("文件传输完毕");
+//				bis.close();
+//				bos.close();
+				
+				
 				InputStreamReader isr = new InputStreamReader(is, "utf-8");
 				BufferedReader br = new BufferedReader(isr);
 				String line = null;

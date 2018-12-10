@@ -21,7 +21,7 @@ public class BufferedOutputStream_flush {
 		 * void flush() 缓冲流的flush方法用于将缓冲区中已经缓存的数据一次性写出.
 		 * 频繁调用flush方法会降低写效率,但是可以保证写出的即时性.根据实际需求酌情调用
 		 */
-		// bos.flush(); // 主动刷出到文件中
+		 bos.flush(); // 主动刷出到文件中
 
 		System.out.println("写出完毕");
 		bos.close();

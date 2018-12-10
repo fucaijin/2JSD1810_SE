@@ -21,9 +21,9 @@ public class Note {
 		
 		while(true){
 			System.out.println("Çë¼ÌĞøÊäÈëÄÚÈİ:");
-			input = scanner.nextLine().toUpperCase();
+			input = scanner.nextLine();
 			
-			if (input.equals("EXIT")) {
+			if (input.equalsIgnoreCase("EXIT")) {
 				break;
 			}
 			
