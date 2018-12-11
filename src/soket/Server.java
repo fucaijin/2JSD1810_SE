@@ -11,7 +11,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 聊天室服务端
@@ -30,7 +31,8 @@ public class Server {
 	/*
 	 * 用于保存所有客户端输出流的数组,为ClientHandler之间共享各自对应客户端的输出流,从而做到广播消息.
 	 */
-	private PrintWriter[] allOut = {};
+//	private PrintWriter[] allOut = {};
+	private List<PrintWriter> allOut = new ArrayList<PrintWriter>();
 
 	public Server() {
 		try {
@@ -106,14 +108,17 @@ public class Server {
 				pw = new PrintWriter(bw, true);
 				
 				synchronized(allOut){
-					// 将该客户端对应的输出流存入到共享数组中
-					// 1.对allOut扩容
-					allOut = Arrays.copyOf(allOut, allOut.length+1);
-					// 2.将该输出流存入到数组最后一个位置
-					allOut[allOut.length-1] = pw;
+//					// 将该客户端对应的输出流存入到共享数组中
+//					// 1.对allOut扩容
+//					allOut = Arrays.copyOf(allOut, allOut.length+1);
+//					// 2.将该输出流存入到数组最后一个位置
+//					allOut[allOut.length-1] = pw;
+					
+					allOut.add(pw);	// 使用集合之后的改进
 				}
 				
-				System.out.println("当前在线人数:" + allOut.length);
+//				System.out.println("当前在线人数:" + allOut.length);
+				System.out.println("当前在线人数:" + allOut.size());
 				
 				/*
 				 * br.readLine()读取客户端发送过来的一行字符串操作中档客户端断开连接时， 客户端系统不同，这里的表现也完全不一样
@@ -124,8 +129,13 @@ public class Server {
 				while ((msg = br.readLine()) != null) {
 //					将消息转发给当前的所有客户端
 					synchronized(allOut){
-						for (int i = 0; i < allOut.length; i++) {
-							allOut[i].println(host + "说:" + msg);
+//						for (int i = 0; i < allOut.length; i++) {
+//							allOut[i].println(host + "说:" + msg);
+//						}
+						
+//						以下为使用集合之后的改进
+						for (PrintWriter o : allOut) {
+							o.println(host + "说:" + msg);
 						}
 					}
 				}
@@ -135,17 +145,20 @@ public class Server {
 //				处理当前客户端断开连接后的操作
 //				1.将当前客户端的输出流从allOut中删除
 				synchronized(allOut){
-					for (int i = 0; i < allOut.length; i++) {
-						if (allOut[i] == pw) {
-							allOut[i] = allOut[allOut.length-1];
-							allOut = Arrays.copyOf(allOut, allOut.length-1);
-							break;
-						}
-					}
+//					for (int i = 0; i < allOut.length; i++) {
+//						if (allOut[i] == pw) {
+//							allOut[i] = allOut[allOut.length-1];
+//							allOut = Arrays.copyOf(allOut, allOut.length-1);
+//							break;
+//						}
+//					}
+					
+					allOut.remove(pw);	// 此行是使用集合之后的改进
 				}
 				
 				System.out.println(host + "下线了");
-				System.out.println("当前在线人数:" + allOut.length);
+//				System.out.println("当前在线人数:" + allOut.length);
+				System.out.println("当前在线人数:" + allOut.size());
 				
 //				关闭Socket流,就会将Socket.get出来的输出/输入流自动关闭
 				try {
