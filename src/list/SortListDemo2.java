@@ -6,16 +6,17 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * 
+ * 排序保存自定义类型元素的集合
  */
 public class SortListDemo2 {
 
 	public static void main(String[] args) {
 		List<Point> list = new ArrayList<Point>();
 		list.add(new Point(1, 2));
-		list.add(new Point(3, 4));
-		list.add(new Point(5, 6));
 		list.add(new Point(7, 8));
+		list.add(new Point(1, 6));
+		list.add(new Point(5, 0));
+		list.add(new Point(4, 8));
 		System.out.println(list);
 
 		/*
@@ -39,7 +40,11 @@ public class SortListDemo2 {
 			 * 当返回值=0:表示两个对象相等
 			 */
 			public int compare(Point p1, Point p2){
-				return 0;
+				int x1 = p1.getX();
+				int y1 = p1.getY();
+				int x2 = p2.getX();
+				int y2 = p2.getY();
+				return (x1*x1+y1*y1) - (x2*x2+y2*y2);
 			}
 		};
 		Collections.sort(list, comparator);
@@ -47,15 +52,24 @@ public class SortListDemo2 {
 		
 		Collections.sort(list, new Comparator<Point>() {
 			public int compare(Point p1, Point p2) {
-				if (p1.getX() > p2.getX()) {
-					return -1;
-				}else if (p1.getX() < p2.getX()){
-					return 1;
-				}
-				return 0;
+				int x1 = p1.getX();
+				int y1 = p1.getY();
+				int x2 = p2.getX();
+				int y2 = p2.getY();
+				return (x1*x1+y1*y1) - (x2*x2+y2*y2);
 			}
 		});
-
+		
+//		一下为lambda表达式的写法,直接用(p1,p2)表示此位置的对象的参数的形参,然后指向要执行的代码或代码块,或返回值
+//		Collections.sort(list, (p1, p2)-> {
+//				int x1 = p1.getX();
+//				int y1 = p1.getY();
+//				int x2 = p2.getX();
+//				int y2 = p2.getY();
+//				return (x1*x1+y1*y1) - (x2*x2+y2*y2);
+//			}
+//		);
+		
 		System.out.println(list);
 	}
 

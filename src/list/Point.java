@@ -1,8 +1,5 @@
 package list;
 
-/**
- * 排序保存自定义类型元素的集合
- */
 public class Point {
 	private int x;
 	private int y;
