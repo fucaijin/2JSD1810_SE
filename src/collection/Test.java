@@ -5,7 +5,7 @@ import java.util.Collection;
 
 /**
  * 面试题,内存画图
- *
+ * 注:一个方法一个栈,方法参数传引用类型传的是引用地址,如果传基本类型则传值.
  */
 public class Test {
 
@@ -15,11 +15,11 @@ public class Test {
 		Point p = new Point(a, 2);
 		Collection<Point> c = new ArrayList<Point>();
 		c.add(p);
-		test(a,b,p,c);
-		System.out.println("a:" + a);
-		System.out.println("b:" + b);
-		System.out.println("p:" + p);
-		System.out.println("c:" + c);
+		test(a, b, p, c);
+		System.out.println("a:" + a);// a:1
+		System.out.println("b:" + b);// b:hello
+		System.out.println("p:" + p);// p:(3, 2)
+		System.out.println("c:" + c);// c:[(2, 6)]
 	}
 
 	public static void test(int a, String b, Point p, Collection<Point> c) {
@@ -31,7 +31,7 @@ public class Test {
 		c.clear();
 		c.add(p);
 		c = new ArrayList<Point>();
-		c.add(new Point(9,0));
+		c.add(new Point(9, 0));
 		p.setX(a);
 	}
 
