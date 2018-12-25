@@ -32,8 +32,8 @@ public class ThreadPoolDemo {
 			// 指派一个任务给线程池
 			threadPool.execute(runn);
 		}// 循环结束
-//		threadPool.shutdown();
-		threadPool.shutdownNow();
+//		threadPool.shutdown();//关闭线程池,但线程池内的线程不会被中断执行,但此时不能操作线程池(从线程池中添加或移除线程)了
+		threadPool.shutdownNow();//马上关闭线程池,线程池内的线程会立马中断.
 		System.out.println("线程池关闭了!");
 	}
 
